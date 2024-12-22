@@ -1,0 +1,12 @@
+[browser]
+serverAddress = "0.0.0.0"
+serverPort = 8501
+
+[runner]
+# Permite que comandos shell sejam executados
+magicEnabled = true
+
+[server]
+# Aumenta o timeout para dar tempo de instalar o Playwright
+maxUploadSize = 200
+timeout = 300

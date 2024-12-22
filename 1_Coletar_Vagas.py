@@ -15,19 +15,10 @@ from datetime import datetime, timedelta
 # Instala o Playwright e seus navegadores se estiver no Streamlit Cloud
 if not os.path.exists("venv"):  # Estamos no Streamlit Cloud
     try:
-        subprocess.run(
-            [sys.executable, "-m", "pip", "install", "playwright"],
-            capture_output=True,
-            check=True
-        )
-        subprocess.run(
-            [sys.executable, "-m", "playwright", "install", "--with-deps"],
-            capture_output=True,
-            check=True
-        )
-    except subprocess.CalledProcessError as e:
+        os.system("playwright install --with-deps chromium")
+    except Exception as e:
         st.error("Erro ao instalar dependências do Playwright")
-        st.code(e.stderr.decode())
+        st.code(str(e))
         st.stop()
 
 # Carrega as variáveis de ambiente
