@@ -1,42 +1,38 @@
-# Python
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-*.so
-.Python
-build/
-develop-eggs/
+
+# Distribution / packaging
 dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
+build/
 *.egg-info/
-.installed.cfg
-*.egg
 
-# Virtual Environment
+# Virtual environment
 venv/
-ENV/
 env/
+.env
 
-# IDE
-.idea/
+# IDE specific files
 .vscode/
+.idea/
 *.swp
 *.swo
-
-# Environment variables
-.env
 
 # Logs
 *.log
 
-# Local development
-.DS_Store
-Thumbs.db
+# Local development configuration
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/playwright/.cache/
+
+# Streamlit
+.streamlit/secrets.toml
