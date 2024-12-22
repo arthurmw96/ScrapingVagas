@@ -204,14 +204,15 @@ class SupabaseClient:
                     j.description,
                     j.category,
                     j.hierarchy,
-                    j.collected_at
+                    j.collected_at,
+                    u.posted_date
                 FROM jobs j
                 INNER JOIN urls u ON j.url = u.url
                 WHERE u.processed = TRUE
-                ORDER BY j.collected_at DESC
+                ORDER BY u.posted_date DESC, j.collected_at DESC
                 """
             )
-            columns = ['url', 'title', 'company', 'location', 'salary', 'description', 'category', 'hierarchy', 'collected_at']
+            columns = ['url', 'title', 'company', 'location', 'salary', 'description', 'category', 'hierarchy', 'collected_at', 'posted_date']
             jobs = []
             for row in self.cursor.fetchall():
                 job = dict(zip(columns, row))

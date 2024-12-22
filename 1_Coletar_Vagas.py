@@ -328,7 +328,7 @@ with tab2:
 
 # Tab 3: Geração de Mensagens
 with tab3:
-    st.markdown("### Geração de Mensagens por Categoria")
+    st.markdown("### Geração de Mensagens por Data de Publicação")
     
     job_processor = JobProcessor()
     client = SupabaseClient()
@@ -339,61 +339,139 @@ with tab3:
     if not processed_jobs:
         st.warning("Nenhuma vaga processada encontrada. Por favor, processe algumas vagas primeiro.")
     else:
-        # Obtém lista de categorias com vagas
-        categories_with_jobs = set()
+        # Obtém todas as datas de publicação disponíveis
+        dates = set()
         for job in processed_jobs:
-            category = job.get('category', '')
-            if isinstance(category, str) and category:
-                # Se a categoria for uma string, divide por vírgula
-                categories = [cat.strip() for cat in category.split(',')]
-                categories_with_jobs.update(categories)
-            elif isinstance(category, list):
-                # Se já for uma lista, adiciona diretamente
-                categories_with_jobs.update(category)
+            posted_date = job.get('posted_date')
+            if posted_date:
+                # Converte para data
+                date = posted_date.date()
+                dates.add(date)
         
-        if not categories_with_jobs:
-            st.warning("Nenhuma categoria encontrada nas vagas processadas.")
+        if not dates:
+            st.warning("Nenhuma data de publicação encontrada nas vagas.")
         else:
-            # Seletor de categoria
-            selected_category = st.selectbox(
-                "Selecione a categoria:", 
-                sorted(list(categories_with_jobs))
-            )
+            # Ordena as datas em ordem decrescente
+            sorted_dates = sorted(dates, reverse=True)
             
-            if st.button("Gerar Mensagem"):
-                with st.spinner("Gerando mensagem..."):
-                    try:
-                        # Filtra vagas da categoria selecionada
-                        category_jobs = []
-                        for job in processed_jobs:
-                            category = job.get('category', '')
-                            if isinstance(category, str) and category:
-                                # Se a categoria for uma string, divide por vírgula
-                                categories = [cat.strip() for cat in category.split(',')]
-                                if selected_category in categories:
-                                    category_jobs.append(job)
-                            elif isinstance(category, list):
-                                # Se já for uma lista, adiciona diretamente
-                                if selected_category in category:
-                                    category_jobs.append(job)
-                        
-                        if category_jobs:
-                            # Gera mensagem para cada vaga
-                            messages = []
-                            for job in category_jobs:
-                                message = job_processor.format_message(job)
-                                messages.append(message)
+            # Seletor de data
+            selected_date = st.date_input(
+                "Selecione a data de publicação:",
+                value=sorted_dates[0],  # Data mais recente como padrão
+                min_value=min(dates),
+                max_value=max(dates)
+            )
+
+            # Filtra vagas pela data selecionada
+            date_jobs = []
+            for job in processed_jobs:
+                posted_date = job.get('posted_date')
+                if posted_date and posted_date.date() == selected_date:
+                    date_jobs.append(job)
+
+            if not date_jobs:
+                st.warning(f"Nenhuma vaga encontrada publicada em {selected_date}")
+            else:
+                st.info(f"Encontradas {len(date_jobs)} vagas publicadas em {selected_date}")
+
+                # Obtém lista de hierarquias com vagas
+                hierarchies_with_jobs = set()
+                for job in date_jobs:
+                    hierarchy = job.get('hierarchy', '')
+                    if isinstance(hierarchy, str) and hierarchy:
+                        hierarchies = [h.strip() for h in hierarchy.split(',')]
+                        hierarchies_with_jobs.update(hierarchies)
+                    elif isinstance(hierarchy, list):
+                        hierarchies_with_jobs.update(hierarchy)
+
+                # Obtém lista de categorias com vagas
+                categories_with_jobs = set()
+                for job in date_jobs:
+                    category = job.get('category', '')
+                    if isinstance(category, str) and category:
+                        categories = [cat.strip() for cat in category.split(',')]
+                        categories_with_jobs.update(categories)
+                    elif isinstance(category, list):
+                        categories_with_jobs.update(category)
+
+                # Seletores de hierarquia e categoria
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    st.markdown("#### Hierarquia")
+                    all_hierarchies = st.checkbox("Todas as hierarquias")
+                    if not all_hierarchies and hierarchies_with_jobs:
+                        selected_hierarchy = st.selectbox(
+                            "Selecione a hierarquia:",
+                            sorted(list(hierarchies_with_jobs))
+                        )
+                
+                with col2:
+                    st.markdown("#### Categoria")
+                    all_categories = st.checkbox("Todas as categorias")
+                    if not all_categories and categories_with_jobs:
+                        selected_category = st.selectbox(
+                            "Selecione a categoria:",
+                            sorted(list(categories_with_jobs))
+                        )
+
+                if st.button("Gerar Mensagem"):
+                    with st.spinner("Gerando mensagem..."):
+                        try:
+                            # Filtra vagas pela hierarquia e categoria selecionadas
+                            filtered_jobs = []
+                            for job in date_jobs:
+                                include_job = True
+                                
+                                # Verifica hierarquia
+                                if not all_hierarchies:
+                                    hierarchy = job.get('hierarchy', '')
+                                    if isinstance(hierarchy, str):
+                                        hierarchies = [h.strip() for h in hierarchy.split(',')]
+                                    elif isinstance(hierarchy, list):
+                                        hierarchies = hierarchy
+                                    else:
+                                        hierarchies = []
+                                    
+                                    if selected_hierarchy not in hierarchies:
+                                        include_job = False
+                                
+                                # Verifica categoria
+                                if include_job and not all_categories:
+                                    category = job.get('category', '')
+                                    if isinstance(category, str):
+                                        categories = [cat.strip() for cat in category.split(',')]
+                                    elif isinstance(category, list):
+                                        categories = category
+                                    else:
+                                        categories = []
+                                    
+                                    if selected_category not in categories:
+                                        include_job = False
+                                
+                                if include_job:
+                                    filtered_jobs.append(job)
                             
-                            # Combina todas as mensagens
-                            final_message = "\n\n".join(messages)
-                            
-                            # Mostra a mensagem em uma área de código
-                            st.code(final_message, language="text")
-                            st.button("📋 Copiar Mensagem", type="primary", help="Clique para copiar a mensagem para a área de transferência")
-                        else:
-                            st.warning("Nenhuma vaga encontrada nesta categoria.")
-                    except Exception as e:
-                        st.error(f"Erro ao gerar mensagem: {str(e)}")
+                            if filtered_jobs:
+                                # Ordena as vagas por data de coleta (mais recentes primeiro)
+                                filtered_jobs.sort(key=lambda x: x.get('collected_at', ''), reverse=True)
+                                
+                                # Gera mensagem para cada vaga
+                                messages = []
+                                for job in filtered_jobs:
+                                    message = job_processor.format_message(job)
+                                    messages.append(message)
+                                
+                                # Combina todas as mensagens
+                                final_message = "\n\n".join(messages)
+                                
+                                # Mostra a mensagem em uma área de código
+                                st.code(final_message, language="text")
+                                st.button("📋 Copiar Mensagem", type="primary", help="Clique para copiar a mensagem para a área de transferência")
+                            else:
+                                st.warning("Nenhuma vaga encontrada com os filtros selecionados.")
+                        except Exception as e:
+                            st.error(f"Erro ao gerar mensagem: {str(e)}")
 
 # Footer
 st.markdown("---")
