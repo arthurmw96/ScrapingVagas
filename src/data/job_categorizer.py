@@ -37,12 +37,16 @@ class JobCategorizer:
         
         for classification, keywords in classifications.items():
             for keyword in keywords:
-                if ' ' in keyword:
-                    if keyword in text:
-                        found.append(classification)
-                        self.logger.info(f"Classificação encontrada: {classification} (palavra-chave composta: {keyword})")
-                        break
+                keyword_parts = keyword.split()
+                if len(keyword_parts) > 1:
+                    # Para palavras compostas, verifica se todas as palavras aparecem em sequência
+                    for i in range(len(words) - len(keyword_parts) + 1):
+                        if words[i:i + len(keyword_parts)] == keyword_parts:
+                            found.append(classification)
+                            self.logger.info(f"Classificação encontrada: {classification} (palavra-chave composta: {keyword})")
+                            break
                 else:
+                    # Para palavras simples, procura a palavra exata
                     if keyword in words:
                         found.append(classification)
                         self.logger.info(f"Classificação encontrada: {classification} (palavra-chave: {keyword})")

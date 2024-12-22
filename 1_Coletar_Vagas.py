@@ -11,6 +11,7 @@ import sys
 import pandas as pd
 import plotly.graph_objects as go
 from datetime import datetime, timedelta
+import pyperclip
 
 # Instala o Playwright e seus navegadores se estiver no Streamlit Cloud
 if not os.path.exists("venv"):  # Estamos no Streamlit Cloud
@@ -467,9 +468,7 @@ with tab3:
                                 
                                 # Mostra a mensagem em uma área de código
                                 st.code(final_message, language="text")
-                                st.button("📋 Copiar Mensagem", type="primary", help="Clique para copiar a mensagem para a área de transferência")
-                            else:
-                                st.warning("Nenhuma vaga encontrada com os filtros selecionados.")
+                                st.caption("ℹ️ Para copiar a mensagem, clique no botão que aparece no canto superior direito do bloco de código ao passar o mouse.")
                         except Exception as e:
                             st.error(f"Erro ao gerar mensagem: {str(e)}")
 

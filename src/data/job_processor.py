@@ -44,22 +44,22 @@ class JobProcessor:
     def format_message(self, job):
         """
         Formata uma vaga para envio via WhatsApp
-        Usa formatações do WhatsApp:
-        * para negrito
-        _ para itálico
-        ~ para tachado
-        ``` para monospace
         """
         # Trata valores None ou vazios
         company = job.get('company')
         company = "EMPRESA CONFIDENCIAL" if not company else company
+        
+        salary = job.get('salary', '')
+        if not salary or salary.lower() in ['a combinar', 'não informado']:
+            salary = "Salário até combinar"
 
-        return f"""🔍 *NOVA VAGA*
+        return f"""📌 {job.get('title', 'Não informado').upper()}
 
-📌 Cargo: *{job.get('title', 'Não informado')}*
-🏢 Empresa: _{company}_
-📍 Local: {job.get('location', 'Não informado')}
-💰 Salário: *{job.get('salary', 'Não informado')}*
+- Empresa: {company}
+- Local: {job.get('location', 'Não informado')}
+- Salário: {salary}
 
-ℹ️ Link da vaga: {job.get('url', '')}
-➖➖➖➖➖➖➖➖"""
+- Link da vaga: {job.get('url', '')}
+
+➖➖➖➖➖➖➖➖
+"""
