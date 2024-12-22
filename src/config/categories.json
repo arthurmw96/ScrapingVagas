@@ -1,0 +1,60 @@
+{
+    "administrativa": [
+        "assistente administrativo", "secretária", "secretaria", "recepcionista",
+        "auxiliar de escritório", "auxiliar administrativo", "administrativo"
+    ],
+    "comercial": [
+        "vendedor", "representante comercial", "consultor de vendas", "promotor",
+        "vendas", "comercial", "inside sales", "account manager", "sales"
+    ],
+    "construcao_civil": [
+        "pedreiro", "mestre de obras", "eletricista", "encanador", "engenheiro civil",
+        "construção", "obra", "civil", "arquiteto", "construcao"
+    ],
+    "educacao": [
+        "professor", "tutor", "pedagogo", "monitor", "auxiliar de ensino",
+        "educação", "educacao", "ensino", "escola", "docente", "instrutor"
+    ],
+    "financeira": [
+        "contador", "analista financeiro", "contas a pagar", "contas a receber",
+        "auditor", "financeiro", "finance", "contabilidade", "tesouraria"
+    ],
+    "juridica": [
+        "advogado", "estagiário de direito", "assistente jurídico", "paralegal",
+        "direito", "jurídico", "juridico", "legal", "compliance"
+    ],
+    "logistica": [
+        "motorista", "estoquista", "conferente", "coordenador logístico",
+        "logística", "logistica", "transporte", "estoque", "almoxarifado", "supply chain"
+    ],
+    "marketing": [
+        "publicitário", "redator", "analista de marketing", "designer gráfico",
+        "editor de vídeo", "marketing digital", "social media", "mídia", "comunicação",
+        "criativo", "criativa", "design", "ux", "ui"
+    ],
+    "operacional": [
+        "zelador", "porteiro", "auxiliar de limpeza", "operador de máquinas",
+        "serviços gerais", "servicos gerais", "manutenção", "manutencao", "operador"
+    ],
+    "rh": [
+        "recrutador", "assistente de rh", "analista de folha", "recursos humanos",
+        "departamento pessoal", "dp", "seleção", "selecao", "recruiter", "talent"
+    ],
+    "saude": [
+        "enfermeiro", "técnico de enfermagem", "cuidador", "fisioterapeuta",
+        "saúde", "saude", "médico", "medico", "hospital", "clínica", "clinica"
+    ],
+    "tecnologia": [
+        "desenvolvedor", "analista de ti", "suporte técnico", "cientista de dados",
+        "programador", "frontend", "backend",
+        "fullstack", "full stack", "software", "tech", "developer"
+    ],
+    "turismo": [
+        "atendente de hotel", "guia turístico", "garçom", "chef", "cozinha",
+        "hotel", "turismo", "restaurante", "hospitalidade", "hotelaria"
+    ],
+    "estagio": [
+        "estagiário", "estágio", "estagio", "jovem aprendiz", "trainee",
+        "aprendiz", "estudante"
+    ]
+}
