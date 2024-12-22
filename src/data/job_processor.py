@@ -44,6 +44,11 @@ class JobProcessor:
     def format_message(self, job):
         """
         Formata uma vaga para envio via WhatsApp
+        Usa formatações do WhatsApp:
+        * para negrito
+        _ para itálico
+        ~ para tachado
+        ``` para monospace
         """
         # Trata valores None ou vazios
         company = job.get('company')
