@@ -11,7 +11,6 @@ import sys
 import pandas as pd
 import plotly.graph_objects as go
 from datetime import datetime, timedelta
-import pyperclip
 
 # Instala o Playwright e seus navegadores se estiver no Streamlit Cloud
 if not os.path.exists("venv"):  # Estamos no Streamlit Cloud
