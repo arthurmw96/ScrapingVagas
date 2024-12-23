@@ -389,8 +389,15 @@ with tab3:
                     elif isinstance(category, list):
                         categories_with_jobs.update(category)
 
-                # Seletores de hierarquia e categoria
-                col1, col2 = st.columns(2)
+                # Obtém lista de cidades com vagas
+                cities_with_jobs = set()
+                for job in date_jobs:
+                    location = job.get('location', '')
+                    if location:
+                        cities_with_jobs.add(location)
+
+                # Seletores de hierarquia, categoria e cidade
+                col1, col2, col3 = st.columns(3)
                 
                 with col1:
                     st.markdown("#### Hierarquia")
@@ -410,38 +417,53 @@ with tab3:
                             sorted(list(categories_with_jobs))
                         )
 
+                with col3:
+                    st.markdown("#### Cidade")
+                    all_cities = st.checkbox("Todas as cidades")
+                    if not all_cities and cities_with_jobs:
+                        selected_city = st.selectbox(
+                            "Selecione a cidade:",
+                            sorted(list(cities_with_jobs))
+                        )
+
                 if st.button("Gerar Mensagem"):
                     with st.spinner("Gerando mensagem..."):
                         try:
-                            # Filtra vagas pela hierarquia e categoria selecionadas
+                            # Filtra vagas pela hierarquia, categoria e cidade selecionadas
                             filtered_jobs = []
                             for job in date_jobs:
                                 include_job = True
                                 
                                 # Verifica hierarquia
                                 if not all_hierarchies:
-                                    hierarchy = job.get('hierarchy', '')
-                                    if isinstance(hierarchy, str):
-                                        hierarchies = [h.strip() for h in hierarchy.split(',')]
-                                    elif isinstance(hierarchy, list):
-                                        hierarchies = hierarchy
+                                    job_hierarchy = job.get('hierarchy', '')
+                                    if isinstance(job_hierarchy, str):
+                                        job_hierarchies = [h.strip() for h in job_hierarchy.split(',')]
+                                    elif isinstance(job_hierarchy, list):
+                                        job_hierarchies = job_hierarchy
                                     else:
-                                        hierarchies = []
+                                        job_hierarchies = []
                                     
-                                    if selected_hierarchy not in hierarchies:
+                                    if selected_hierarchy not in job_hierarchies:
                                         include_job = False
                                 
                                 # Verifica categoria
                                 if include_job and not all_categories:
-                                    category = job.get('category', '')
-                                    if isinstance(category, str):
-                                        categories = [cat.strip() for cat in category.split(',')]
-                                    elif isinstance(category, list):
-                                        categories = category
+                                    job_category = job.get('category', '')
+                                    if isinstance(job_category, str):
+                                        job_categories = [c.strip() for c in job_category.split(',')]
+                                    elif isinstance(job_category, list):
+                                        job_categories = job_category
                                     else:
-                                        categories = []
+                                        job_categories = []
                                     
-                                    if selected_category not in categories:
+                                    if selected_category not in job_categories:
+                                        include_job = False
+
+                                # Verifica cidade
+                                if include_job and not all_cities:
+                                    job_location = job.get('location', '')
+                                    if job_location != selected_city:
                                         include_job = False
                                 
                                 if include_job:
