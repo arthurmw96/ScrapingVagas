@@ -1,4 +1,4 @@
-# ZapVagas
+# ScrapingVagas
 
 Sistema de webscraping de vagas de emprego.
 
