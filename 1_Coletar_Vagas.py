@@ -12,6 +12,13 @@ import pandas as pd
 import plotly.graph_objects as go
 from datetime import datetime, timedelta
 
+# Configuração da página deve ser o primeiro comando Streamlit
+st.set_page_config(
+    page_title="ZipVagas",
+    page_icon="💼",
+    layout="wide"
+)
+
 # Instala o Playwright e seus navegadores se estiver no Streamlit Cloud
 if not os.path.exists("venv"):  # Estamos no Streamlit Cloud
     try:
@@ -27,13 +34,6 @@ if not os.path.exists("venv"):  # Estamos no Streamlit Cloud
 
 # Carrega as variáveis de ambiente
 load_dotenv()
-
-# Configuração da página
-st.set_page_config(
-    page_title="ZipVagas",
-    page_icon="💼",
-    layout="wide"
-)
 
 # Detecta se estamos rodando localmente ou no Streamlit Cloud
 IS_LOCAL = os.path.exists("venv")
