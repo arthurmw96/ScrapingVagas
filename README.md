@@ -1,6 +1,6 @@
 # ZapVagas
 
-Sistema de webscraping de vagas de emprego com envio automático via WhatsApp.
+Sistema de webscraping de vagas de emprego.
 
 ## Configuração do Ambiente
 
@@ -24,7 +24,6 @@ pip install -r requirements.txt
 
 - `src/`: Código fonte principal
   - `scraper/`: Módulos relacionados ao webscraping
-  - `whatsapp/`: Módulos para envio de mensagens
   - `data/`: Módulos para processamento de dados
 - `data/`: Arquivos de dados
 - `config/`: Arquivos de configuração
@@ -32,8 +31,4 @@ pip install -r requirements.txt
 
 ## Variáveis de Ambiente
 
-Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
-```
-WHATSAPP_NUMBER=seu_numero
-TARGET_URL=url_do_site_de_vagas
-```
+Crie um arquivo `.env` na raiz do projeto com as variáveis de acesso ao banco de dados.
